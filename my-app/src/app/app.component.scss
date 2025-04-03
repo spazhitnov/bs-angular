@@ -1,0 +1,15 @@
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+::ng-deep .p-button.p-button-sm {
+    padding: 0.5rem;
+}
+::ng-deep .p-card .p-card-content {
+    padding: 0;
+}
+::ng-deep .p-card .p-card-body {
+    padding: 1.5rem;
+}

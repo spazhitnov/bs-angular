@@ -1,0 +1,19 @@
+.header-container {
+  display: flex;
+  background: white;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75rem 3rem .75rem 3.5rem;
+  &_logo {
+    flex: 1;
+  }
+  &_actions {
+    display: flex;
+    justify-content: flex-end;
+    &_item {
+      flex: 1;
+      white-space: nowrap;
+      max-width: fit-content;
+    }
+  }
+}

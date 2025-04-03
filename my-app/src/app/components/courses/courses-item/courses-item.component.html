@@ -1,0 +1,42 @@
+<p-card>
+  <div class="course-container">
+    <div class="course-firstline">
+      <span class="course-firstline_title">{{ course.title }}</span>
+      <div class="course-firstline_dates">
+        <div class="course-firstline_dates_item">
+          <i
+            class="pi pi-clock"
+            style="font-size: 0.875rem; color: #64748b"
+          ></i>
+          <span class="course-firstline_dates_item_text">
+            {{ getTimeString() }}
+          </span>
+        </div>
+        <div class="course-firstline_dates_item">
+          <i
+            class="pi pi-calendar"
+            style="font-size: 0.875rem; color: #64748b"
+          ></i>
+          <span class="course-firstline_dates_item_text">
+            {{ getDateString() }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="course-secondline">
+      <span class="course-secondline_text">{{ course.description }}</span>
+      <div class="course-secondline_actions">
+        <p-button
+          icon="pi pi-pencil"
+          styleClass="p-button-sm p-button-text"
+          (click)="change.emit(course)"
+        ></p-button>
+        <p-button
+          icon="pi pi-trash"
+          styleClass="p-button-sm p-button-text p-button-danger"
+          (click)="delete.emit(course)"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+</p-card>
