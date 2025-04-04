@@ -3,11 +3,21 @@ import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { Course } from 'src/app/models/app.model';
 import { ButtonModule } from 'primeng/button';
+import { IsnewcourseDirective } from 'src/app/directives/isnewcourse.directive';
+import { NgClass } from '@angular/common';
+import { DurationPipe } from 'src/app/pipes/duration.pipe';
 
 @Component({
   selector: 'app-courses-item',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule],
+  imports: [
+    CommonModule,
+    CardModule,
+    ButtonModule,
+    IsnewcourseDirective,
+    NgClass,
+    DurationPipe,
+  ],
   templateUrl: './courses-item.component.html',
   styleUrls: ['./courses-item.component.scss'],
 })
@@ -15,65 +25,4 @@ export class CoursesItemComponent {
   @Input() course!: Course;
   @Output() change = new EventEmitter<Course>();
   @Output() delete = new EventEmitter<Course>();
-
-  monthArr = [
-    'января',
-    'февраля',
-    'марта',
-    'апреля',
-    'мая',
-    'июня',
-    'июля',
-    'августа',
-    'сентября',
-    'октября',
-    'ноября',
-    'декабря',
-  ];
-
-  getTimeString(): string {
-    const hours = +(this.course.duration / 60).toFixed(0);
-    const minutes = this.course.duration % 60;
-    return `${hours} ${this.getTimeWord(
-      hours,
-      'hours'
-    )} ${minutes} ${this.getTimeWord(minutes)}`;
-  }
-
-  getDateString(): string {
-    return `${this.course.creationDate.getDate()} ${
-      this.monthArr[this.course.creationDate.getMonth()]
-    } ${this.course.creationDate.getFullYear()} года`;
-  }
-
-  private getTimeWord(num: number, type?: string): string {
-    let word: string;
-    let numToStr = String(num);
-    let latestSymbol = numToStr[numToStr.length - 1];
-    if (numToStr[numToStr.length - 2] != '1') {
-      switch (Number(latestSymbol)) {
-        case 0:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-          word = type === 'hours' ? 'часов' : 'минут';
-          break;
-        case 1:
-          word = type === 'hours' ? 'час' : 'минута';
-          break;
-        case 2:
-        case 3:
-        case 4:
-          word = type === 'hours' ? 'часа' : 'минуты';
-          break;
-        default:
-          word = type === 'hours' ? 'часа' : 'минуты';
-      }
-    } else {
-      word = type === 'hours' ? 'часов' : 'минут';
-    }
-    return word;
-  }
 }

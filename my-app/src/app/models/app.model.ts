@@ -4,6 +4,7 @@ export interface Course {
     creationDate: Date;
     duration: number;
     description: string;
+    topRated: boolean;
 }
 
 export interface User {

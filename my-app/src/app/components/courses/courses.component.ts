@@ -7,6 +7,9 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { CoursesItemComponent } from './courses-item/courses-item.component';
 import { Course } from 'src/app/models/app.model';
+import { CardModule } from 'primeng/card';
+import { OrderByPipe } from 'src/app/pipes/orderBy.pipe';
+import { FilterPipe } from 'src/app/pipes/filter.pipe copy';
 
 @Component({
   selector: 'app-courses',
@@ -18,20 +21,27 @@ import { Course } from 'src/app/models/app.model';
     ButtonModule,
     FormsModule,
     CoursesItemComponent,
+    CardModule,
+    OrderByPipe,
   ],
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss'],
+  providers: [FilterPipe]
 })
 export class CoursesComponent implements OnInit {
+  allCourses: Course[] = [];
   courses: Course[] = [];
   searchParam!: string | null;
   items: MenuItem[] = [{ label: 'Курсы', icon: 'pi pi-home', routerLink: '/' }];
 
+  constructor(private filterPipe: FilterPipe) {}
+
   ngOnInit(): void {
-    this.courses = [
+    this.allCourses = this.courses = [
       {
         id: this.generateId(),
-        creationDate: new Date(),
+        topRated: Math.random() > 0.5,
+        creationDate: this.setRandomDate(),
         title: 'Reprehenderit est veniam elit',
         duration: this.generateDuration(),
         description:
@@ -39,23 +49,26 @@ export class CoursesComponent implements OnInit {
       },
       {
         id: this.generateId(),
-        creationDate: new Date(),
-        title: 'Мagna Excepteur aute Deserunt',
+        topRated: Math.random() > 0.5,
+        creationDate: this.setRandomDate(),
+        title: 'Magna Excepteur aute Deserunt',
         duration: this.generateDuration(),
         description:
           'Sunt culpa officia minim commodo eiusmod irure sunt nostrud. Mollit aliquip id occaecat officia proident anim dolor officia qui voluptate consectetur laborum. Duis incididunt culpa aliqua mollit do fugiat ea dolor mollit irure Lorem tempor.',
       },
       {
         id: this.generateId(),
-        creationDate: new Date(),
-        title: 'Мagna Excepteur aute Deserunt',
+        topRated: Math.random() > 0.5,
+        creationDate: this.setRandomDate(),
+        title: 'Magna Excepteur aute Deserunt',
         duration: this.generateDuration(),
         description:
           'Est consequat deserunt officia fugiat culpa in aliquip consectetur. Est nostrud occaecat cillum elit officia officia ea magna et minim officia commodo sunt. Deserunt duis minim magna nostrud enim enim commodo sit elit nostrud cillum aliquip est qui.',
       },
       {
         id: this.generateId(),
-        creationDate: new Date(),
+        topRated: Math.random() > 0.5,
+        creationDate: this.setRandomDate(),
         title: 'Sit voluptate eiusmod ea',
         duration: this.generateDuration(),
         description:
@@ -63,7 +76,8 @@ export class CoursesComponent implements OnInit {
       },
       {
         id: this.generateId(),
-        creationDate: new Date(),
+        topRated: Math.random() > 0.5,
+        creationDate: this.setRandomDate(),
         title: 'Duis mollit reprehenderit ad',
         duration: this.generateDuration(),
         description:
@@ -73,8 +87,11 @@ export class CoursesComponent implements OnInit {
   }
 
   onSearch(): void {
-    console.log(this.searchParam);
-    this.searchParam = null;
+    this.courses = this.allCourses;
+    this.courses = this.searchParam ? this.filterPipe.transform(this.courses, this.searchParam) : this.allCourses;
+  }
+
+  onAdd(): void {
   }
 
   generateId(): string {
@@ -98,5 +115,14 @@ export class CoursesComponent implements OnInit {
 
   onDelete(course: Course): void {
     console.log(course.id);
+  }
+
+  setRandomDate(): Date {
+    return new Date(
+      new Date().setHours(
+        new Date().getHours() +
+          +((Math.random() < 0.5 ? -1 : 1) * Math.random() * 1000).toFixed(0)
+      )
+    );
   }
 }
