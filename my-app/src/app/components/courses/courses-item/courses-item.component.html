@@ -53,7 +53,7 @@
         <p-button
           icon="pi pi-trash"
           styleClass="p-button-sm p-button-text p-button-danger"
-          (click)="delete.emit(course)"
+          (click)="delete.emit({event: $event, course})"
         ></p-button>
       </div>
     </div>

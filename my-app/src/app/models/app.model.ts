@@ -6,9 +6,3 @@ export interface Course {
     description: string;
     topRated: boolean;
 }
-
-export interface User {
-    id: string;
-    firstName: string;
-    lastName: string;
-}

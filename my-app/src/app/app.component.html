@@ -1,3 +1,7 @@
-  <app-header></app-header>
-  <router-outlet></router-outlet>
-  <div class="footer"><app-footer></app-footer></div>
+<app-header [isAuth]="isAuth" (logout)="onLogout()"></app-header>
+<app-authentification
+  (onLogin)="onLogin($event)"
+  *ngIf="!isAuth"
+></app-authentification>
+<router-outlet></router-outlet>
+<div class="footer"><app-footer></app-footer></div>

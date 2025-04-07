@@ -7,8 +7,7 @@ const routes: Routes = [
     path: 'main',
     component: CoursesComponent,
   },
-  
-  { path: '**', redirectTo: 'main' },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({

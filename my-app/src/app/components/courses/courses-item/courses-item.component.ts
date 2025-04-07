@@ -24,5 +24,5 @@ import { DurationPipe } from 'src/app/pipes/duration.pipe';
 export class CoursesItemComponent {
   @Input() course!: Course;
   @Output() change = new EventEmitter<Course>();
-  @Output() delete = new EventEmitter<Course>();
+  @Output() delete = new EventEmitter<{event: Event, course: Course}>();
 }

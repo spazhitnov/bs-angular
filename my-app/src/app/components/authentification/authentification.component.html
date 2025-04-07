@@ -1,0 +1,31 @@
+<div class="auth-container">
+  <p-card>
+    <div class="p-grid p-fluid auth-card">
+      <div class="p-col-12">
+        <h1>Вход</h1>
+      </div>
+      <div class="p-col-12">
+        <span class="p-float-label">
+          <input inputId="login" type="text" [(ngModel)]="login" pInputText />
+          <label for="login">Логин</label>
+        </span>
+      </div>
+      <div class="p-col-12">
+        <span class="p-float-label">
+          <p-password
+            inputId="password"
+            [(ngModel)]="password"
+            [toggleMask]="true"
+            [feedback]="false"
+            appendTo="body"
+          />
+          <label for="password">Пароль</label>
+        </span>
+      </div>
+      <div class="p-col-12 p-d-flex p-jc-between p-ai-center">
+        <a href="" style="color: #3b82f6">Забыли пароль?</a>
+        <p-button label="Войти" (click)="onLogin.emit({login, password})"></p-button>
+      </div>
+    </div>
+  </p-card>
+</div>
