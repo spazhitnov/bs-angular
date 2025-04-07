@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Course } from 'src/app/models/app.model';
 import { CardModule } from 'primeng/card';
@@ -10,6 +15,9 @@ import { DurationComponent } from './duration/duration.component';
 import { CalendarModule } from 'primeng/calendar';
 import { AppLocalizedCalendarDirective } from 'src/app/directives/p-calendar-locale.directive';
 import { AuthorsComponent } from './authors/authors.component';
+import { CoursesService } from '../courses.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-course-params',
@@ -30,10 +38,30 @@ import { AuthorsComponent } from './authors/authors.component';
   styleUrls: ['./course-params.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CourseParamsComponent {
-  @Input() course!: Course | null;
+export class CourseParamsComponent implements OnInit {
+  course!: Course | null;
 
-  onSave(): void {}
+  constructor(
+    private coursesService: CoursesService,
+    private activeRout: ActivatedRoute,
+    private helper: HelperService,
+    private router: Router
+  ) {}
 
-  onCancel(): void {}
+  ngOnInit(): void {
+    const id = this.activeRout.snapshot.params['id'];
+    this.course = id
+      ? this.coursesService.getCourseById(id)
+      : this.coursesService.createCourse();
+  }
+
+  onSave(): void {
+    this.coursesService.updateCourse(this.course);
+    this.onCancel();
+  }
+
+  onCancel(): void {
+    this.helper.menuItem$.next({ routerLink: 'courses/list' });
+    this.router.navigate(['courses/list']);
+  }
 }

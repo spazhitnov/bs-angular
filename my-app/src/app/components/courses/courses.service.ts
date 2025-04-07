@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
 import { Course } from 'src/app/models/app.model';
 import { HelperService } from 'src/app/services/helper.service';
 
@@ -61,14 +60,17 @@ export class CoursesService {
     return this.courses;
   }
 
-  createCourse(): {courses: Course[], newCourse: Course} {
-    const newCourse = {} as Course
+  createCourse(): Course {
+    const newCourse = {} as Course;
     newCourse.id = this.helper.generateId();
-    this.courses.push(newCourse);
-    return {courses: this.courses, newCourse};
+    return newCourse;
   }
 
   getCourseById(id: string): Course | null {
+    const a =
+      this.courses.find((item) => {
+        return item.id === id;
+      }) || null;
     return (
       this.courses.find((item) => {
         return item.id === id;
@@ -76,10 +78,15 @@ export class CoursesService {
     );
   }
 
-  updateCourse(newCourse: Course): Course[] {
+  updateCourse(newCourse: Course | null): Course[] | null {
+    if (!newCourse) {
+      return null;
+    }
     let course = this.getCourseById(newCourse.id);
     if (course) {
       course = newCourse;
+    } else {
+      this.courses.push(newCourse);
     }
     return this.courses;
   }
@@ -90,6 +97,4 @@ export class CoursesService {
     });
     return this.courses;
   }
-
-  
 }

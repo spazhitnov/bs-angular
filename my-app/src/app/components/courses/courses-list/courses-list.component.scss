@@ -1,0 +1,13 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  &_text {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+}
+::ng-deep .dialog.p-dialog {
+  width: 40rem;
+}

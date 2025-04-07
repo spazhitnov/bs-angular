@@ -1,35 +1,33 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from './services/auth.service';
-import { User } from './models/user.model';
 import { Router } from '@angular/router';
+import { HelperService } from './services/helper.service';
+import { Subscription, takeUntil } from 'rxjs';
+import { AutoUnsubscribeDirective } from './directives/auto-unsubscribe.directive';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent extends AutoUnsubscribeDirective implements OnInit {
   forChanges: number = 0;
   isAuth!: boolean;
+  subs: Subscription[] = [];
 
-  constructor(private authService: AuthService, private router: Router) {}
-
-  ngOnInit(): void {
-    this.router.navigate([''])
+  constructor(private router: Router, private helper: HelperService) {
+    super();
   }
 
-  onLogin(params: Partial<User>): void {
-    this.authService.login(params);
-    this.isAuth = this.authService.isAuthenticated();
-    this.router.navigate(['main']);
+  ngOnInit(): void {
+    this.router.navigate(['']);
+    this.subs.push(
+      this.helper.isAuth$.pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+        this.isAuth = data;
+      })
+    );
   }
 
   onLogout(): void {
     this.router.navigate(['']);
-    this.isAuth = this.authService.isAuthenticated();
-  }
-
-  ngOnDestroy(): void {
-    localStorage.clear()
   }
 }

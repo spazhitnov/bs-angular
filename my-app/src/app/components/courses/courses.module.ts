@@ -1,35 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { CoursesItemComponent } from './courses-item/courses-item.component';
-import { CardModule } from 'primeng/card';
-import { OrderByPipe } from 'src/app/pipes/orderBy.pipe';
 import { CoursesComponent } from './courses.component';
-import { FilterPipe } from 'src/app/pipes/filter.pipe';
-import { CoursesService } from './courses.service';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { BrowserModule } from '@angular/platform-browser';
 import { CourseParamsComponent } from './course-params/course-params.component';
+import { CoursesListComponent } from './courses-list/courses-list.component';
+import { CoursesRoutingModule } from './courses-routing.module';
 
 @NgModule({
   declarations: [CoursesComponent],
   imports: [
     CommonModule,
-    BrowserModule,
     BreadcrumbModule,
-    InputTextModule,
-    ButtonModule,
     FormsModule,
     CoursesItemComponent,
-    CardModule,
-    OrderByPipe,
-    ConfirmDialogModule,
-    CourseParamsComponent
+    CourseParamsComponent,
+    CoursesListComponent,
+    CoursesRoutingModule
   ],
-  providers: [CoursesService, FilterPipe, ConfirmationService, MessageService]
 })
 export class CoursesModule {}

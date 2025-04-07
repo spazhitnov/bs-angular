@@ -10,8 +10,7 @@ import localeRu from '@angular/common/locales/ru';
 import { CoursesModule } from './components/courses/courses.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthentificationModule } from './components/authentification/authentification.module';
-import { AuthService } from './services/auth.service';
-import { HttpClientModule } from '@angular/common/http';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 
 registerLocaleData(localeRu);
 
@@ -26,7 +25,7 @@ registerLocaleData(localeRu);
     CoursesModule,
     BrowserAnimationsModule,
     AuthentificationModule,
-    HttpClientModule
+    BreadcrumbsComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'ru' }],
   bootstrap: [AppComponent],

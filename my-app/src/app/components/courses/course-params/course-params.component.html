@@ -1,65 +1,67 @@
-<p-card>
-  <ng-container *ngIf="course">
-    <div class="p-grid p-fluid">
-      <div class="p-col p-lg-8 p-col-12 course-param-container">
-        <div class="p-col-12 p-mb-2">
-          <h1>Новый курс</h1>
-        </div>
-        <div class="p-col-10 p-mb-2">
-          <span class="p-float-label">
-            <input
-              inputId="title"
-              type="text"
-              [(ngModel)]="course.title"
-              pInputText
-            />
-            <label for="login">Логин</label>
-          </span>
-        </div>
-        <div class="p-col-10 p-mb-2">
-          <span class="p-float-label">
-            <textarea
-              id="comment"
-              [rows]="5"
-              pInputTextarea
-              [autoResize]="true"
-              [autofocus]="true"
-              [(ngModel)]="course.description"
-            ></textarea>
-            <label for="comment">
-              <span>Описание</span>
-            </label>
-          </span>
-        </div>
-        <div class="p-col-12 p-mb-2">
-          <app-duration [duration]="course.duration"></app-duration>
-        </div>
-        <div class="p-col-10 p-mb-2">
-          <span class="p-float-label">
-            <p-calendar
-              appLocalizedCalendar
-              [(ngModel)]="course.creationDate"
-              dateFormat="dd/mm/yy"
-              appendTo="body"
-              [showIcon]="true"
-            ></p-calendar>
-            <label for="signingDate">
-              <span>Дата</span>
-            </label>
-          </span>
-        </div>
-        <div class="p-col-10 p-mb-4">
-          <app-authors></app-authors>
-        </div>
-        <div class="p-d-flex">
-          <p-button
-            label="Отмена"
-            styleClass="p-button p-button-text"
-            (click)="onCancel()"
-          ></p-button>
-          <p-button label="Сохранить" (click)="onSave()"></p-button>
+<div class="course-param-container">
+  <p-card>
+    <ng-container *ngIf="course">
+      <div class="p-grid p-fluid">
+        <div class="p-col p-lg-8 p-col-12">
+          <div class="p-col-12 p-mb-2">
+            <h1>Новый курс</h1>
+          </div>
+          <div class="p-col-10 p-mb-2">
+            <span class="p-float-label">
+              <input
+                inputId="title"
+                type="text"
+                [(ngModel)]="course.title"
+                pInputText
+              />
+              <label for="login">Наименование</label>
+            </span>
+          </div>
+          <div class="p-col-10 p-mb-2">
+            <span class="p-float-label">
+              <textarea
+                id="comment"
+                [rows]="5"
+                pInputTextarea
+                [autoResize]="true"
+                [autofocus]="true"
+                [(ngModel)]="course.description"
+              ></textarea>
+              <label for="comment">
+                <span>Описание</span>
+              </label>
+            </span>
+          </div>
+          <div class="p-col-12 p-mb-2">
+            <app-duration [duration]="course.duration"></app-duration>
+          </div>
+          <div class="p-col-10 p-mb-2">
+            <span class="p-float-label">
+              <p-calendar
+                appLocalizedCalendar
+                [(ngModel)]="course.creationDate"
+                dateFormat="dd/mm/yy"
+                appendTo="body"
+                [showIcon]="true"
+              ></p-calendar>
+              <label for="signingDate">
+                <span>Дата</span>
+              </label>
+            </span>
+          </div>
+          <div class="p-col-10 p-mb-4">
+            <app-authors></app-authors>
+          </div>
+          <div class="p-d-flex">
+            <p-button
+              label="Отмена"
+              styleClass="p-button p-button-text"
+              (click)="onCancel()"
+            ></p-button>
+            <p-button label="Сохранить" (click)="onSave()"></p-button>
+          </div>
         </div>
       </div>
-    </div>
-  </ng-container>
-</p-card>
+    </ng-container>
+  </p-card>
+</div>
