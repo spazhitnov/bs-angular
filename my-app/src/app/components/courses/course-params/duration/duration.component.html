@@ -1,0 +1,23 @@
+<div class="p-grid p-fluid">
+  <div class="p-col-10">
+    <span class="p-float-label">
+      <p-inputNumber
+        [(ngModel)]="duration"
+        mode="decimal"
+        [showButtons]="true"
+        inputId="duration"
+        [min]="0"
+        [max]="1000"
+      >
+      </p-inputNumber>
+      <label for="duration">
+        <span>Продолжительность</span>
+      </label>
+    </span>
+  </div>
+  <div class="p-col-2">
+    <span style="vertical-align: -webkit-baseline-middle">{{
+      duration || 0 | duration
+    }}</span>
+  </div>
+</div>

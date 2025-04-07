@@ -61,15 +61,11 @@ export class CoursesService {
     return this.courses;
   }
 
-  createCourse(): Course[] {
-    const i = Math.floor(Math.random() * (this.courses.length + 1));
-    const newCourse = this.courses[i];
+  createCourse(): {courses: Course[], newCourse: Course} {
+    const newCourse = {} as Course
     newCourse.id = this.helper.generateId();
-    newCourse.topRated = Math.random() > 0.5;
-    newCourse.creationDate = this.helper.setRandomDate();
-    newCourse.duration = this.helper.generateDuration();
     this.courses.push(newCourse);
-    return this.courses;
+    return {courses: this.courses, newCourse};
   }
 
   getCourseById(id: string): Course | null {

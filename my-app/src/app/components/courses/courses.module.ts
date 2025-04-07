@@ -13,6 +13,7 @@ import { CoursesService } from './courses.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { BrowserModule } from '@angular/platform-browser';
+import { CourseParamsComponent } from './course-params/course-params.component';
 
 @NgModule({
   declarations: [CoursesComponent],
@@ -27,6 +28,7 @@ import { BrowserModule } from '@angular/platform-browser';
     CardModule,
     OrderByPipe,
     ConfirmDialogModule,
+    CourseParamsComponent
   ],
   providers: [CoursesService, FilterPipe, ConfirmationService, MessageService]
 })

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { Course } from 'src/app/models/app.model';
@@ -20,6 +20,7 @@ import { DurationPipe } from 'src/app/pipes/duration.pipe';
   ],
   templateUrl: './courses-item.component.html',
   styleUrls: ['./courses-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoursesItemComponent {
   @Input() course!: Course;

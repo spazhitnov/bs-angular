@@ -12,7 +12,9 @@ import { CoursesService } from './courses.service';
 export class CoursesComponent implements OnInit {
   courses: Course[] = [];
   searchParam!: string | null;
-  items: MenuItem[] = [{ label: 'Курсы', icon: 'pi pi-home', routerLink: '/' }];
+  items: MenuItem[] = [];
+  isParamsVisible!: boolean;
+  selectedCourse: Course | null = null;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -23,6 +25,20 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit(): void {
     this.courses = this.coursesService.getList();
+    this.items = [
+      {
+        label: 'Курсы',
+        icon: 'pi pi-home',
+        command: () => {
+          this.selectedCourse = null;
+          this.isParamsVisible = false;
+          this.items = this.items.filter((item) => {
+            return item.label === 'Курсы';
+          });
+          this.items = [...this.items];
+        },
+      },
+    ];
   }
 
   onSearch(): void {
@@ -35,7 +51,15 @@ export class CoursesComponent implements OnInit {
   }
 
   onAdd(): void {
-    this.courses = this.coursesService.createCourse();
+    const params = this.coursesService.createCourse();
+    this.courses = params?.courses;
+    this.items.push({
+      label: 'Новый курс',
+      icon: 'none',
+    });
+    this.items = [...this.items];
+    this.selectedCourse = params?.newCourse;
+    this.isParamsVisible = true;
   }
 
   onChange(course: Course): void {

@@ -3,5 +3,5 @@
   (onLogin)="onLogin($event)"
   *ngIf="!isAuth"
 ></app-authentification>
-<router-outlet></router-outlet>
+<router-outlet *ngIf="isAuth"></router-outlet>
 <div class="footer"><app-footer></app-footer></div>
