@@ -1,0 +1,9 @@
+{
+    "context": [
+        "/courses",
+        "/users",
+        "/authors"
+    ],
+    "target": "http://localhost:3000",
+    "secure": false
+}

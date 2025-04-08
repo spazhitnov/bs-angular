@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoursesService } from '../courses.service';
 import { FilterPipe } from 'src/app/pipes/filter.pipe';
@@ -13,6 +18,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Course } from 'src/app/models/app.model';
 import { Router } from '@angular/router';
 import { HelperService } from 'src/app/services/helper.service';
+import { takeUntil } from 'rxjs';
+import { AutoUnsubscribeDirective } from 'src/app/directives/auto-unsubscribe.directive';
 
 @Component({
   selector: 'app-courses-list',
@@ -32,32 +39,60 @@ import { HelperService } from 'src/app/services/helper.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [FilterPipe, ConfirmationService, MessageService],
 })
-export class CoursesListComponent implements OnInit {
+export class CoursesListComponent
+  extends AutoUnsubscribeDirective
+  implements OnInit
+{
   courses: Course[] = [];
   searchParam!: string | null;
   isParamsVisible!: boolean;
   selectedCourse: Course | null = null;
+  page = 1;
 
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private coursesService: CoursesService,
-    private filterPipe: FilterPipe,
     private helper: HelperService,
+    private cdr: ChangeDetectorRef,
     private router: Router
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.courses = this.coursesService.getList();
+    this.getCourses();
+  }
+
+  getCourses(): void {
+    this.coursesService
+      .getList(this.page)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        this.courses = data;
+        this.cdr.detectChanges();
+      });
   }
 
   onSearch(): void {
-    this.courses = this.searchParam
-      ? this.filterPipe.transform(
-          this.coursesService.getList(),
-          this.searchParam
-        )
-      : this.coursesService.getList();
+    if (this.searchParam) {
+      this.coursesService
+        .getListByTitle(this.searchParam)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe((data) => {
+          this.courses = data;
+          this.cdr.detectChanges();
+        });
+    } else {
+      this.getCourses();
+    }
+
+    // this.courses = this.searchParam
+    //   ? this.filterPipe.transform(
+    //       this.coursesService.getList(),
+    //       this.searchParam
+    //     )
+    //   : this.coursesService.getList();
   }
 
   onAdd(): void {
@@ -90,12 +125,26 @@ export class CoursesListComponent implements OnInit {
       rejectIcon: 'none',
 
       accept: () => {
-        this.courses = this.coursesService.removeCourse(data.course);
+        this.deleteCourse(data.course);
+      },
+    });
+  }
+
+  onLoad(): void {
+    this.page += 1;
+    this.getCourses();
+  }
+
+  deleteCourse(course: Course): void {
+    this.coursesService
+      .removeCourse(course)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
         this.messageService.add({
           severity: 'error',
           detail: 'Курс удален',
         });
-      },
-    });
+        this.getCourses();
+      });
   }
 }

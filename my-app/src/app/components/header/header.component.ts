@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LogoComponent } from '../logo/logo.component';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { HelperService } from 'src/app/services/helper.service';
 import { Subscription, takeUntil } from 'rxjs';
 import { AutoUnsubscribeDirective } from 'src/app/directives/auto-unsubscribe.directive';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-header',
@@ -22,23 +23,46 @@ export class HeaderComponent
 {
   @Output() logout = new EventEmitter();
   isAuth!: boolean;
-  subs: Subscription[] = [];
+  user!: User;
 
-  constructor(private authService: AuthService, private helper: HelperService) {
+  constructor(
+    private authService: AuthService,
+    private helper: HelperService,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    this.subs.push(
-      this.helper.isAuth$.pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-        this.isAuth = data;
-      })
-    );
+    this.helper.isAuth$.pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+      this.isAuth = data;
+    });
+    this.authService
+      .getUserInfo()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        if (data) {
+          if (data) {
+            this.user = data;
+            this.cdr.detectChanges();
+          }
+        }
+      });
   }
 
   onLogout(): void {
-    const login = this.authService.getUserInfo();
-    this.authService.logout();
-    console.log(`Выход ${login}`);
+    this.authService
+      .getUserInfo()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data) => {
+        if (data) {
+          this.authService.logout();
+          console.log(`Выход ${data.email}`);
+        }
+      });
+  }
+
+  getFIO(): string {
+    return `${this.user.firstName} ${this.user.lastName}`
   }
 }

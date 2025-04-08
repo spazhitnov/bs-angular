@@ -11,6 +11,8 @@ import { CoursesModule } from './components/courses/courses.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthentificationModule } from './components/authentification/authentification.module';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './services/interceptors/auth.interceptor';
 
 registerLocaleData(localeRu);
 
@@ -25,9 +27,17 @@ registerLocaleData(localeRu);
     CoursesModule,
     BrowserAnimationsModule,
     AuthentificationModule,
-    BreadcrumbsComponent
+    BreadcrumbsComponent,
+    HttpClientModule,
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'ru' }],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'ru' },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

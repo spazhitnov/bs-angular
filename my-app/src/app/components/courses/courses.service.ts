@@ -1,4 +1,6 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Course } from 'src/app/models/app.model';
 import { HelperService } from 'src/app/services/helper.service';
 
@@ -6,95 +8,42 @@ import { HelperService } from 'src/app/services/helper.service';
   providedIn: 'root',
 })
 export class CoursesService {
-  courses: Course[] = [
-    {
-      id: this.helper.generateId(),
-      topRated: Math.random() > 0.5,
-      creationDate: this.helper.setRandomDate(),
-      title: 'Reprehenderit est veniam elit',
-      duration: this.helper.generateDuration(),
-      description:
-        'Sunt culpa officia minim commodo eiusmod irure sunt nostrud. Mollit aliquip id occaecat officia proident anim dolor officia qui voluptate consectetur laborum. Duis incididunt culpa aliqua mollit do fugiat ea dolor mollit irure Lorem tempor.',
-    },
-    {
-      id: this.helper.generateId(),
-      topRated: Math.random() > 0.5,
-      creationDate: this.helper.setRandomDate(),
-      title: 'Magna Excepteur aute Deserunt',
-      duration: this.helper.generateDuration(),
-      description:
-        'Sunt culpa officia minim commodo eiusmod irure sunt nostrud. Mollit aliquip id occaecat officia proident anim dolor officia qui voluptate consectetur laborum. Duis incididunt culpa aliqua mollit do fugiat ea dolor mollit irure Lorem tempor.',
-    },
-    {
-      id: this.helper.generateId(),
-      topRated: Math.random() > 0.5,
-      creationDate: this.helper.setRandomDate(),
-      title: 'Magna Excepteur aute Deserunt',
-      duration: this.helper.generateDuration(),
-      description:
-        'Est consequat deserunt officia fugiat culpa in aliquip consectetur. Est nostrud occaecat cillum elit officia officia ea magna et minim officia commodo sunt. Deserunt duis minim magna nostrud enim enim commodo sit elit nostrud cillum aliquip est qui.',
-    },
-    {
-      id: this.helper.generateId(),
-      topRated: Math.random() > 0.5,
-      creationDate: this.helper.setRandomDate(),
-      title: 'Sit voluptate eiusmod ea',
-      duration: this.helper.generateDuration(),
-      description:
-        'Commodo id sunt sunt adipisicing et aliquip voluptate laborum consectetur. Occaecat nisi sint exercitation ullamco adipisicing irure est in consectetur aute voluptate. Ea pariatur dolor anim ea reprehenderit ut non occaecat magna adipisicing exercitation nisi consequat.',
-    },
-    {
-      id: this.helper.generateId(),
-      topRated: Math.random() > 0.5,
-      creationDate: this.helper.setRandomDate(),
-      title: 'Duis mollit reprehenderit ad',
-      duration: this.helper.generateDuration(),
-      description:
-        'Est minim ea aute sunt laborum minim eu excepteur. Culpa sint exercitation mollit enim ad culpa aliquip laborum cillum. Dolor officia culpa labore ex eiusmod ut est ea voluptate ea nostrud.',
-    },
-  ];
+  private url: string = 'http://localhost:3000';
+  courses: Course[] = [];
 
-  constructor(private helper: HelperService) {}
+  constructor(private helper: HelperService, private http: HttpClient) {}
 
-  getList(): Course[] {
-    return this.courses;
-  }
-
-  createCourse(): Course {
+  getEmptyCourse(): Course {
     const newCourse = {} as Course;
     newCourse.id = this.helper.generateId();
     return newCourse;
   }
 
-  getCourseById(id: string): Course | null {
-    const a =
-      this.courses.find((item) => {
-        return item.id === id;
-      }) || null;
-    return (
-      this.courses.find((item) => {
-        return item.id === id;
-      }) || null
-    );
+  getList(page: number): Observable<Course[]> {
+    const params = new HttpParams({ fromObject: { _start: 0, _limit: 10 * page, _sort: '-creationDate' } });
+    return this.http.get<Course[]>(`${this.url}/courses`, {params});
   }
 
-  updateCourse(newCourse: Course | null): Course[] | null {
-    if (!newCourse) {
-      return null;
-    }
-    let course = this.getCourseById(newCourse.id);
-    if (course) {
-      course = newCourse;
-    } else {
-      this.courses.push(newCourse);
-    }
-    return this.courses;
+  createCourse(newCourse: Course): Observable<Course> {
+    return this.http.post<Course>(`${this.url}/courses/`, { ...newCourse });
   }
 
-  removeCourse(course: Course): Course[] {
-    this.courses = this.courses.filter((item) => {
-      return item.id !== course.id;
+  getCourseById(id: string | number): Observable<Course> {
+    return this.http.get<Course>(`${this.url}/courses/${id}`);
+  }
+
+  updateCourse(newCourse: Course): Observable<Course> {
+    return this.http.put<Course>(`${this.url}/courses/${newCourse.id}`, {
+      ...newCourse,
     });
-    return this.courses;
+  }
+
+  removeCourse(course: Course): Observable<Object> {
+    return this.http.delete(`${this.url}/courses/${course.id}`);
+  }
+
+  getListByTitle(title: string): Observable<Course[]> {
+    const params = new HttpParams({ fromObject: { title } });
+    return this.http.get<Course[]>(`${this.url}/courses`, { params });
   }
 }

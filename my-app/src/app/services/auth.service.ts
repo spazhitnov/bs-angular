@@ -1,18 +1,31 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
-import { HelperService } from './helper.service';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private helper: HelperService) {}
+  private url: string = 'http://localhost:3000';
 
-  login(user: Partial<User>): User {
-    user.id = this.helper.generateId();
-    user.userFIO = 'Никита Удзумаков';
-    localStorage.setItem('user', JSON.stringify(user));
-    return user as User;
+  constructor(private http: HttpClient) {}
+
+  login(userForm: Partial<User>): Observable<User | null> {
+    const params = new HttpParams({
+      fromObject: { email: userForm.email || '' },
+    });
+    return this.http.get<User[]>(`${this.url}/users`, { params }).pipe(
+      map((data: User[]) => {
+        for (const user of data) {
+          if (userForm.password === user.password) {
+            localStorage.setItem('user', user.fakeToken);
+            return user;
+          }
+        }
+        return null;
+      })
+    );
   }
 
   logout(): void {
@@ -20,11 +33,18 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    const user = localStorage.getItem('user')
-    return user ? true : false
+    const user = localStorage.getItem('user');
+    return user ? true : false;
   }
 
-  getUserInfo(): string {
-    return JSON.parse(localStorage.getItem('user') || '')?.login;
+  getUserInfo(): Observable<User | null> {
+    const params = new HttpParams({
+      fromObject: { fakeToken: localStorage.getItem('user') || '' },
+    });
+    return this.http.get<User[]>(`${this.url}/users`, { params }).pipe(
+      map((data: User[]) => {
+        return data?.length > 0 ? data[0] : null;
+      })
+    );
   }
 }

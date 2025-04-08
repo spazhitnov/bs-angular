@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CoursesListComponent } from './courses-list/courses-list.component';
 import { CourseParamsComponent } from './course-params/course-params.component';
-import { NoPageComponent } from '../no-page/no-page.component';
 import { CoursesComponent } from './courses.component';
 
 const routes: Routes = [

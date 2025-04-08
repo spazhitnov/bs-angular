@@ -2,11 +2,11 @@
   <div class="header-container_logo">
     <app-logo></app-logo>
   </div>
-  <div class="header-container_actions" *ngIf="isAuth">
+  <div class="header-container_actions" *ngIf="isAuth && user">
     <div class="header-container_actions_item">
       <p-button
         icon="pi pi-user"
-        label="Никита Удзумаков"
+        [label]="getFIO()"
         styleClass="p-button-sm p-button-secondary p-button-text header-btn"
       ></p-button>
     </div>

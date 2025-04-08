@@ -46,20 +46,16 @@ export class BreadcrumbsComponent
   }
 
   ngOnInit(): void {
-    this.subs.push(
-      this.helper.menuItem$
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((data) => {
-          if (data.routerLink === 'courses/list') {
-            this.items = this.items.filter((item) => {
-              return item.routerLink === 'courses/list';
-            });
-          } else {
-            this.items.push(data);
-          }
-          this.items = [...this.items];
-          this.cdr.detectChanges();
-        })
-    );
+    this.helper.menuItem$.pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+      if (data.routerLink === 'courses/list') {
+        this.items = this.items.filter((item) => {
+          return item.routerLink === 'courses/list';
+        });
+      } else {
+        this.items.push(data);
+      }
+      this.items = [...this.items];
+      this.cdr.detectChanges();
+    });
   }
 }
